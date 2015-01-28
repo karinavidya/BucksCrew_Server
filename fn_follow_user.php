@@ -15,12 +15,15 @@ session_start();
 //include("get_curr_session.php");
 
 // check for get data
-if (isset($_GET["userID"])) {
-    $subscriptionID = $_GET['userID'];
+if (isset($_GET["publicName"])) {
+    $subscriptionName = $_GET['publicName'];
+	$getSubsID = mysql_query("SELECT * from dbAccount WHERE publicName = '$subscriptionName'");
+	$row = mysql_fetch_array($getSubsID);
+    $subscriptionID = $row["userID"];	
 	
 	$followerName = $_SESSION['login_username'];
-	$getID = mysql_query("SELECT userID from dbAccount WHERE privateName = '$followerName'");
-	$row = mysql_fetch_array($getID);
+	$getFollID = mysql_query("SELECT * from dbAccount WHERE privateName = '$followerName'");
+	$row = mysql_fetch_array($getFollID);
     $followerID = $row["userID"];	
 			
 	if ($followerID > 0) {

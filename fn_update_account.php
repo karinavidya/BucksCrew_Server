@@ -14,9 +14,9 @@ include 'mysql_connect.php';
 session_start();
  
 // check for valid ID
-if (isset($_POST['userID'])) {
-    $accUserID = $_POST['userID'];
-	$result = mysql_query("SELECT * FROM dbAccount WHERE userID = '$accUserID'") or die(mysql_error("Database connect - unsuccessful"));
+if (isset($_POST['privateName'])) {
+    $accPrivName = $_POST['privateName'];
+	$result = mysql_query("SELECT * FROM dbAccount WHERE privateName = '$accPrivName'") or die(mysql_error("Database connect - unsuccessful"));
 	
 	if (mysql_num_rows($result) == 1) {
 	
@@ -24,7 +24,7 @@ if (isset($_POST['userID'])) {
 		if (isset($_POST['publicName'])) {
 			$accPublicName = $_POST['publicName'];
 			// mysql update row with matched userID
-			$result = mysql_query("UPDATE dbAccount SET publicName = '$accPublicName' WHERE userID = $accUserID");
+			$result = mysql_query("UPDATE dbAccount SET publicName = '$accPublicName' WHERE privateName = '$accPrivName'");
 		 
 			// check if row inserted or not
 			if ($result) {
@@ -41,7 +41,7 @@ if (isset($_POST['userID'])) {
 		if (isset($_POST['accountEmailAddress'])) {
 			$accEmailAddress = $_POST['accountEmailAddress'];
 			// mysql update row with matched userID
-			$result = mysql_query("UPDATE dbAccount SET accountEmailAddress = '$accEmailAddress' WHERE userID = $accUserID");
+			$result = mysql_query("UPDATE dbAccount SET accountEmailAddress = '$accEmailAddress' WHERE privateName = '$accPrivName'");
 		 
 			// check if row inserted or not
 			if ($result) {
@@ -58,7 +58,7 @@ if (isset($_POST['userID'])) {
 		if (isset($_POST['password'])) {
 			$accPassword = $_POST['password'];
 			// mysql update row with matched userID
-			$result = mysql_query("UPDATE dbAccount SET password = '$accPassword' WHERE userID = $accUserID");
+			$result = mysql_query("UPDATE dbAccount SET password = '$accPassword' WHERE privateName = '$accPrivName'");
 		 
 			// check if row inserted or not
 			if ($result) {

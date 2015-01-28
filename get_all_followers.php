@@ -14,8 +14,11 @@ include 'mysql_connect.php';
 session_start();
  
 // check for valid ID
-if (isset($_GET['userID'])) {
-    $subscriptionID = $_GET['userID'];
+if (isset($_GET['publicName'])) {
+    $subscriptionName = $_GET['publicName'];
+	$getSubsID = mysql_query("SELECT * from dbAccount WHERE publicName = '$subscriptionName'");
+	$row = mysql_fetch_array($getSubsID);
+    $subscriptionID = $row["userID"];
 	
 	// SELECT u.*, s.followerID FROM dbsubscription s, dbAccount u WHERE s.subscriptionID=u.userID and s.subscriptionID=2 
 	$result = mysql_query("SELECT u.* FROM dbSubscription s, dbAccount u WHERE s.followerID=u.userID AND subscriptionID = '$subscriptionID'") or die(mysql_error("Database connect - unsuccessful"));
@@ -40,7 +43,7 @@ if (isset($_GET['userID'])) {
     }
 } else {
     $response["success"] = 0;
-	$response["message"] = "Invalid user";
+	$response["message"] = "Invalid User";
 }
 echo json_encode($response);
 

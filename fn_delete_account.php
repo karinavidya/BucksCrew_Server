@@ -13,11 +13,11 @@ include 'mysql_connect.php';
 session_start();
  
 // check for required fields
-if (isset($_POST['userID'])) {
-    $accUserID = $_POST['userID'];
+if (isset($_POST['publicName'])) {
+    $accPublName = $_POST['publicName'];
  
     // mysql update row with matched userID
-    $result = mysql_query("DELETE FROM dbAccount WHERE userID = $accUserID");
+    $result = mysql_query("DELETE FROM dbAccount WHERE publicName = '$accPublName'");
  
     // check if row deleted or not
     if (mysql_affected_rows() > 0) {

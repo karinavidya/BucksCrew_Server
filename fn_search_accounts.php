@@ -7,14 +7,10 @@
  
 // array for JSON response
 $response = array();
- 
-// include db connect class
-require_once __DIR__ . '/db_connect.php';
- 
-// connecting to db
-$db = new DB_CONNECT();
 
-// start session
+// include db connect class
+include 'mysql_connect.php';
+
 session_start();
  
 // check for post data
@@ -23,37 +19,41 @@ if (isset($_POST["publicName"])) {
  
     // get a user detail from accounts table
 	$result = mysql_query("SELECT * FROM dbAccount WHERE publicName like '%$publicName%'") or die(mysql_error());
+	$response["acc"] = array();
  
-// check for empty result
-if (mysql_num_rows($result) > 0) {
-    // looping through all results
-    // user accounts node
-    $response["acc"] = array();
- 
-    while ($row = mysql_fetch_array($result)) {
-        // temp user array
-        $acc = array();
-        $acc["userID"] = $row["userID"];
-        $acc["password"] = $row["password"];
-        $acc["accountEmailAddress"] = $row["accountEmailAddress"];
-        $acc["privateName"] = $row["privateName"];
-        $acc["publicName"] = $row["publicName"];
-		$acc["createTimestamp"] = $row["createTimestamp"];
- 
-        // push single account into final response array
-        array_push($response["acc"], $acc);
-    }
-    // success
-    $response["success"] = 1;
- 
-    // echoing JSON response
-    echo json_encode($response);
+    if (!empty($result)) {
+        // check for empty result
+        if (mysql_num_rows($result) > 0) {
+            while ($row = mysql_fetch_array($result)) {
+                $accArr = array();
+                $accArr["userID"] = $row["userID"];
+                $accArr["privateName"] = $row["privateName"];
+                $accArr["publicName"] = $row["publicName"];
+                $accArr["password"] = $row["password"];
+                $accArr["accountEmailAddress"] = $row["accountEmailAddress"];
+                $accArr["createTimestamp"] = $row["createTimestamp"];
+				
+				// push single account into final response array
+                array_push($response["acc"], $accArr);
+		    }
+    			
+	        //success
+	        $response["success"] = 1;
+        } else {
+            // no account found
+            $response["success"] = 0;
+            $response["message"] = "No user found";
+        }
+    } else {
+        // no account found
+        $response["success"] = 0;
+        $response["message"] = "No user found";
+    }
 } else {
-    // no products found
-    $response["success"] = 0;
-    $response["message"] = "No user accounts found";
- 
-    // echo no users JSON
-    echo json_encode($response);
+    // we are required to 
+    $response["success"] = 0;
+    $response["message"] = "Invalid Name";
 }
+echo json_encode($response);
+	
 ?>
